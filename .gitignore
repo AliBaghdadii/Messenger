@@ -1,3 +1,9 @@
-*.txt
+# Data files
 *.json
+
+# test files
 test*
+
+# folders
+*pycache*
+# !Server*

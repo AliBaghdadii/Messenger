@@ -1,41 +1,32 @@
-"""
-Messenger 1.1
-Created by Ali Baghdadi
-No Copyright
-"""
+from time import gmtime, sleep
 from json import dump
-from time import localtime, strftime
+from Users import Login_To_Account, clear
 
-# creating text file
-message_file = open("data.json", "a+")
+# checking for existing the user
+UserName = Login_To_Account()
 
-# where messages save
-user_inputs = dict()
+# terminal clearing
+clear()
 
-def getting_message(user_inputs):
-    try:
-        # getting message
-        text_input = input("Enter your message: ")
-        user_inputs["text"] = text_input
-        # describe the time the message sent
-        user_inputs["time"] = strftime("%a, %d %b %Y %H:%M", localtime())
-        # if user wants to leave
-        if text_input.lower() == "exit":
-            print("you left")
-            message_file.close()
-            exit()
-        # sending messages to text file
-        dump(user_inputs, message_file)
-        # message_file.write(';\n')
-        # message_file.write(str(user_inputs["text"] + "\n"))
-        # message_file.write(str(user_inputs["time"] + "\n"))
-        # message_file.write("\n")
-    # if input has error
-    except:
-        print("Program closed.")
-        message_file.close()
-        exit()
-
+# the information of chats
+user_inputs = {"text": "", "time": "", "day": "", "month": "", "year": ""}
 
 while True:
-    getting_message(user_inputs)
+    try:
+        # saving chats
+        message_file = open("./server/data.json", "a+")
+        # start sending message
+        text_input = input(f'{UserName}: ')
+        # the information of chat such as text, time, etc
+        user_inputs["text"] = text_input
+        Chat_Time = gmtime()
+        user_inputs["time"] = f'{Chat_Time.tm_hour}:{Chat_Time.tm_min}'
+        user_inputs["day"], user_inputs["month"], user_inputs["year"] = Chat_Time.tm_mday, Chat_Time.tm_mon, Chat_Time.tm_year
+        # sending information to text file
+        dump(user_inputs, message_file)
+        message_file.write('\n')
+        message_file.close()
+    except:
+        print("Exit!")
+        message_file.close()
+        exit()
